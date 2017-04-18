@@ -1,52 +1,25 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { itemsFetchData } from '../actions/items';
-
-class ItemList extends Component {
-    componentDidMount() {
-        this.props.fetchData('http://5826ed963900d612000138bd.mockapi.io/items');
-    }
-
-    render() {
-        if (this.props.hasErrored) {
-            return <p>Sorry! There was an error loading the items</p>;
-        }
-
-        if (this.props.isLoading) {
-            return <p>Loading…</p>;
-        }
-
-        return (
-            <ul>
-                {this.props.items.map((item) => (
-                    <li key={item.id}>
-                        {item.label}
-                    </li>
-                ))}
-            </ul>
-        );
-    }
-}
-
-ItemList.propTypes = {
-    fetchData: PropTypes.func.isRequired,
-    items: PropTypes.array.isRequired,
-    hasErrored: PropTypes.bool.isRequired,
-    isLoading: PropTypes.bool.isRequired
-};
-
-const mapStateToProps = (state) => {
+import { usersFetchData, currentLoginUser,ordersFetchData,instrumentsFetchData } from '../actions/items';
+import Main from './MainComponent'
+import ReduxModal from 'react-redux-modal'
+const mapStateToProps = (state) => {    
     return {
-        items: state.items,
+        users: state.users,
         hasErrored: state.itemsHasErrored,
-        isLoading: state.itemsIsLoading
+        isLoading: state.itemsIsLoading,
+        user_logged: state.user_logged,
+        orders: state.orders,
+        instruments: state.instruments
     };
 };
-
 const mapDispatchToProps = (dispatch) => {
     return {
-        fetchData: (url) => dispatch(itemsFetchData(url))
+        fetchData: (url) => dispatch(usersFetchData(url)),
+        currentLoginUser: (user) => dispatch(currentLoginUser(user)),
+        fetchTableData: (url,method) => dispatch(ordersFetchData(url,method)),
+        instrumentsData: (url) => dispatch(instrumentsFetchData(url))
     };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(ItemList);
+export default connect(mapStateToProps, mapDispatchToProps)(Main);

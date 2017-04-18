@@ -9,11 +9,18 @@
     "start": "nwb serve-react-app"
   },
   "dependencies": {
+    "axios": "^0.16.1",
+    "file-loader": "^0.11.1",
     "react": "^15.3.2",
+    "react-bootstrap-table": "^3.1.7",
     "react-dom": "^15.3.2",
     "react-redux": "^4.4.5",
+    "react-redux-modal": "^0.5.2",
+    "react-router": "^2.4.0",
+    "react-router-redux": "^4.0.4",
     "redux": "^3.6.0",
-    "redux-thunk": "^2.1.0"
+    "redux-thunk": "^2.1.0",
+    "url-loader": "^0.5.8"
   },
   "devDependencies": {
     "babel-eslint": "^7.1.0",

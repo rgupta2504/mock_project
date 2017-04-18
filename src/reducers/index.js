@@ -1,8 +1,13 @@
 import { combineReducers } from 'redux';
-import { items, itemsHasErrored, itemsIsLoading } from './items';
+import { users, itemsHasErrored, itemsIsLoading,user_logged,orders,instruments } from './items';
 
+import {reducer as modalReducer} from 'react-redux-modal'
 export default combineReducers({
-    items,
+    users,
     itemsHasErrored,
-    itemsIsLoading
+    itemsIsLoading,
+    user_logged,
+    orders,
+    modals: modalReducer,
+    instruments 
 });
