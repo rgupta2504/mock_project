@@ -1,6 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import {Link} from 'react-router';
+import cookie from 'react-cookie';
+
 
 export default class LoginComponent extends React.Component{
     constructor(props){
@@ -27,6 +29,7 @@ export default class LoginComponent extends React.Component{
                 //console.log('false');
             }
         })
+        cookie.save('Trader',selected,{path:'/'});
         this.props.currentLoginUser(selected);
         }
     render(){

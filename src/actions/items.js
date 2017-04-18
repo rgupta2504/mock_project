@@ -80,7 +80,8 @@ export function ordersFetchDataSuccess(orders) {
     };
 }
 
-export function ordersFetchData(url,method) {
+export function ordersFetchData(url,method,data=undefined) {
+    //console.log(data);
     return (dispatch) => {
         if(method=='get'){
             return axios({
@@ -111,6 +112,25 @@ export function ordersFetchData(url,method) {
     //if catch removed
     //Cannot read property 'slice' of null
     //get called to refresh the data
+
+    else{
+         return axios({
+            url: url,
+            timeout: 20000,
+            method: 'POST',
+            responseType: 'json',
+            data
+        }).then((response) => {
+            //console.log(response)
+            return response.data;
+        }).then((orders) => {
+            //dispatch(ordersFetchDataSuccess(orders))
+            dispatch(ordersFetchData(url,'get'))
+        }).catch(()=>console.log())
+          .then(() => {} 
+            //dispatch(ordersFetchData(url,'get'))
+            )
+    }
     };
     
 }
@@ -118,7 +138,7 @@ export function ordersFetchData(url,method) {
 export function instrumentsFetchDataSuccess(instruments) {
     return {
         type: 'INSTRUMENTS_FETCH_DATA_SUCCESS',
-        instruments
+            instruments
     };
 }
 
@@ -140,3 +160,9 @@ export function instrumentsFetchData(url) {
     };
 }
 
+export function pushNotification(msg, data){
+    return {
+        type: msg,
+        data
+    }
+}

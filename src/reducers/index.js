@@ -9,5 +9,5 @@ export default combineReducers({
     user_logged,
     orders,
     modals: modalReducer,
-    instruments 
+    instruments
 });

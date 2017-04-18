@@ -1,6 +1,7 @@
 import React from 'react';
 // in ECMAScript 6
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
+var dateFormat = require('dateformat');
 
 export default class TableComponent extends React.Component{
     constructor(props){

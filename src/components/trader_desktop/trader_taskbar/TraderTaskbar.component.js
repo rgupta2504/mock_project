@@ -1,8 +1,12 @@
 import React from 'react';
 import TableComponent from '../order_table/TraderTable.component';
+import TraderChartComponent from '../order_chart/TraderChartComponent';
 import {modal} from 'react-redux-modal'
 import ReduxModal from 'react-redux-modal';
 import {myModalComopnent} from './myModalComponent';
+import Websocket from 'react-websocket';
+import cookie from 'react-cookie';
+
 
 export default class TraderTaskbar extends React.Component{
     constructor(props){
@@ -12,7 +16,8 @@ export default class TraderTaskbar extends React.Component{
         this.table=this.table.bind(this);
         this.chart=this.chart.bind(this);
         this.random_number=this.random_number.bind(this);
-        this.state={ presentation:0}
+        this.state={ presentation:0};
+        this.handleData= this.handleData.bind(this);
     }
     delete(){
         this.props.fetchTableData('http://localhost:8080/orders','del');
@@ -47,38 +52,72 @@ export default class TraderTaskbar extends React.Component{
       //console.log('asd',x);
       //console.log(this.props.orders)
       var side=['buy','sell'];
-      var side_random=Math.floor((Math.random(side) * 2) );
-      console.log(side[side_random]);
+      var instruments_=[];
+            this.props.instruments.map((item,index)=>{
+                instruments_.push(item);
+                //console.log(instruments_);
+            })
+      for(let i=0;i<x;i++){
+            var side_num=Math.floor((Math.random(side) * 2) );
+            var side_random=side[side_num];
+            //console.log(side[side_random]);
+            
+            var instruments_random=Math.floor((Math.random(x) * 30) );
+            //console.log(instruments_[instruments_random]);
+            var symbol_random=instruments_[instruments_random].symbol;
+            //console.log(symbol_random)
+            var limitPrice_random=instruments_[instruments_random].lastTrade;
+            //console.log(limitPrice_random);
 
-    //   var user_=[];
-    console.log(this.props.instruments);
-    //   this.props.users.map((item,index)=>{
-    //       user_.push(item);
-    //       //console.log(user_);
-    //   })
-    //   var symbol_random=Math.floor((Math.random(x) * 30) );
-    //   console.log(user_[symbol_random]);
- 
+            var quantity_random=Math.floor((Math.random(side) * 100))
+            //console.log(quantity_random);
 
+            //var traderId_selected=this.props.user_logged.id
+            var traderId_selected=cookie.load('Trader').id
+            //console.log(this.props.user_logged.name);
 
-    //   symbol":"AAPL",
-	// "quantity":6000,
-	// "limitPrice":234,
-	// "traderId"
+            var data={
+                side:side_random,
+                symbol:symbol_random,
+                quantity:quantity_random,
+                limitPrice:limitPrice_random,
+                traderId:traderId_selected
+            }
+            //console.log('sddfdff',data);
+
+            this.props.fetchTableData('http://localhost:8080/orders','post',data);
+      }
    }
-    
+    handleData(data){
+        //console.log(data);
+        //let result =JSON.parse(data);
+        //console.log(result,+"sdfdsf");
+        
+        // var result=data.slice(2,);
+        // console.log(result);
+        // data= JSON.parse(result);
+        // this.props.pushnotification(data[0],data[1]);
+        
+       if(data[0]=='4' && data[1]=='2'){
+           data =JSON.parse(data.substring(2, ));
+           //console.log(data);
+           this.props.pushnotification(data[0],data[1]);
+       }
+       //console.log(data);
+    //    let result = JSON.parse(data);
+    //    this.props.fetchOrdersData('http://localhost:8080/orders','get');
+}
+
     render(){
         // console.log(this.props.instruments);
         //  console.log(this.props.users);
         var p;
-        //var no=this.props.create()
-        //console.log(no);
         if(this.state.presentation==0){
             p = <TableComponent {...this.props} />;
             //console.log(this.props,'sddsds');
         }
         else if(this.state.presentation==1){
-
+            p=<TraderChartComponent {...this.props}/>;
         }
         else{
             p= <TableComponent {...this.props}/>
@@ -94,6 +133,9 @@ export default class TraderTaskbar extends React.Component{
                 <button className="navButton btn-xs pull-right" onClick={this.table}><img src={require('./table.png')} alt="" /></button>
                 <button className="navButton btn-xs pull-right" onClick={this.chart}><img src={require('./chart.png')} alt="" /></button>
                 {p}
+                <Websocket url='ws://localhost:8080/socket.io/?transport=websocket' 
+              onMessage={this.handleData}/>
+
             </div>
         );
     }

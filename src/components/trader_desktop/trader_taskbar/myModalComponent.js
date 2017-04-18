@@ -4,11 +4,11 @@ import ReactDOM from 'react-dom';
 export class myModalComopnent extends React.Component {
     constructor(props) {
         super(props);
-        console.log('## MODAL DATA AND PROPS:', this.props);
+        //console.log('## MODAL DATA AND PROPS:', this.props);
     }
     createThisModal(){
         var x=ReactDOM.findDOMNode(this.refs.targetvalue).value
-        console.log(x);
+        //console.log(x);
         this.props.removeModal();
         this.props.random_number(x);
     }
